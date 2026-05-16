@@ -141,7 +141,10 @@ body {
 .mode-icon {
   font-size: 17px;
   width: 22px;
+  height: 22px;
   text-align: center;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 .mode-text {
