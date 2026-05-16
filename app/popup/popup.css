@@ -140,19 +140,17 @@ body {
 
 .mode-icon {
   font-size: 17px;
-  width: 30px;
+  width: 36px;
   height: 30px;
   flex-shrink: 0;
   object-fit: contain;
 }
 
 .mode-icon--md {
-  width: 36px;
   height: 36px;
 }
 
 .mode-icon--lg {
-  width: 36px;
   height: 36px;
 }
 
