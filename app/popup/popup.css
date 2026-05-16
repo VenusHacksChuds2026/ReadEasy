@@ -270,8 +270,8 @@ body {
 }
 
 .ai-btn-icon {
-  height: 24px;
-  width: auto;
+  height: 22px;
+  width: 22px;
   object-fit: contain;
   flex-shrink: 0;
 }
