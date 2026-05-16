@@ -247,19 +247,21 @@ async function loadTTSState() {
   updateTTSUI();
 } // 'stopped' | 'playing' | 'paused'
 
+const TTS_ICON = '<img src="../images/read_aloud.png" class="tts-icon" alt="">';
+
 function updateTTSUI() {
   const mainBtn = document.getElementById('btn-tts-main');
   const stopBtn = document.getElementById('btn-tts-stop');
   if (ttsState === 'stopped') {
-    mainBtn.textContent = '▶ Read Aloud';
+    mainBtn.innerHTML = `${TTS_ICON} Read Aloud`;
     mainBtn.classList.remove('active');
     stopBtn.classList.add('hidden');
   } else if (ttsState === 'playing') {
-    mainBtn.textContent = '⏸ Pause';
+    mainBtn.innerHTML = `${TTS_ICON} Pause`;
     mainBtn.classList.add('active');
     stopBtn.classList.remove('hidden');
   } else {
-    mainBtn.textContent = '▶ Resume';
+    mainBtn.innerHTML = `${TTS_ICON} Resume`;
     mainBtn.classList.add('active');
     stopBtn.classList.remove('hidden');
   }

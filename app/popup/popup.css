@@ -389,6 +389,13 @@ body {
   border-color: #8bbccc;
 }
 
+.tts-icon {
+  height: 16px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
 .tts-stop-btn {
   flex: 0 0 34px;
 }
