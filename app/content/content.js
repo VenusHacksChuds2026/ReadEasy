@@ -10,8 +10,8 @@ function setMode(mode, enabled) {
   if (!cls) return;
   document.documentElement.classList.toggle(cls, enabled);
   if (mode === 'focus') {
-    if (enabled) { markFocusElements(); initReadingRuler(); }
-    else cleanupFocusMode();
+    if (enabled) initReadingRuler();
+    else cleanupReadingRuler();
   }
   if (mode === 'screenReader' && enabled) {
     runScreenReaderAid();
@@ -44,38 +44,6 @@ function findMainContent() {
   return candidates[0] || document.body;
 }
 
-function markFocusElements() {
-  const main = findMainContent();
-  main.classList.add('readeasy-main-content');
-
-  const dimSelectors = [
-    'nav', 'aside', 'footer',
-    '[class*="sidebar"]', '[id*="sidebar"]',
-    '[class*="navigation"]', '[id*="navigation"]',
-    '[class*="navbar"]', '[id*="navbar"]',
-    '[class*="advertisement"]', '[class*="-ad-"]', '[id*="-ad-"]',
-    '[class*="social-share"]', '[class*="share-buttons"]',
-    '[class*="related-posts"]', '[class*="recommended"]',
-  ];
-
-  dimSelectors.forEach(sel => {
-    document.querySelectorAll(sel).forEach(el => {
-      if (!el.contains(main) && !main.contains(el) && el !== main) {
-        el.classList.add('readeasy-dim-element');
-      }
-    });
-  });
-}
-
-function cleanupFocusMode() {
-  document.querySelectorAll('.readeasy-main-content').forEach(el =>
-    el.classList.remove('readeasy-main-content')
-  );
-  document.querySelectorAll('.readeasy-dim-element').forEach(el =>
-    el.classList.remove('readeasy-dim-element')
-  );
-  cleanupReadingRuler();
-}
 
 function onRulerMouseMove(e) {
   const ruler = document.getElementById('readeasy-ruler');

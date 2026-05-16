@@ -86,63 +86,7 @@ html.readeasy-dyslexia h4 {
   margin-bottom: 0.6em !important;
 }
 
-/* ===== FOCUS MODE ===== */
-html.readeasy-focus * {
-  animation: none !important;
-  animation-duration: 0s !important;
-  transition-duration: 0s !important;
-}
-
-/* Hide pure junk — these never contain real content */
-html.readeasy-focus [class*="cookie"],
-html.readeasy-focus [id*="cookie"],
-html.readeasy-focus [class*="gdpr"],
-html.readeasy-focus [class*="consent"],
-html.readeasy-focus [class*="popup"]:not([role="dialog"]),
-html.readeasy-focus [class*="Popup"]:not([role="dialog"]),
-html.readeasy-focus [class*="modal"]:not([role="dialog"]):not([aria-modal="true"]),
-html.readeasy-focus [class*="Modal"]:not([role="dialog"]),
-html.readeasy-focus [class*="overlay"]:not([role="dialog"]):not([aria-modal="true"]),
-html.readeasy-focus [class*="banner"]:not([role="banner"]),
-html.readeasy-focus [class*="newsletter"],
-html.readeasy-focus [class*="subscribe"],
-html.readeasy-focus [class*="notification"]:not([role="alert"]):not([aria-live]) {
-  display: none !important;
-}
-
-/* Dim structural chrome without breaking layout */
-html.readeasy-focus .readeasy-dim-element {
-  opacity: 0.07 !important;
-  pointer-events: none !important;
-  user-select: none !important;
-}
-
-/* Typography on detected main content */
-html.readeasy-focus .readeasy-main-content,
-html.readeasy-focus .readeasy-main-content p,
-html.readeasy-focus .readeasy-main-content li,
-html.readeasy-focus .readeasy-main-content td,
-html.readeasy-focus .readeasy-main-content span {
-  font-size: 18px !important;
-  line-height: 1.85 !important;
-  color: #2c2c2c !important;
-  font-family: Georgia, 'Times New Roman', serif !important;
-}
-
-html.readeasy-focus .readeasy-main-content p {
-  margin-bottom: 1.3em !important;
-}
-
-html.readeasy-focus .readeasy-main-content h1,
-html.readeasy-focus .readeasy-main-content h2,
-html.readeasy-focus .readeasy-main-content h3 {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
-  color: #1a1a1a !important;
-  margin-top: 1.5em !important;
-  margin-bottom: 0.5em !important;
-}
-
-/* Reading ruler */
+/* ===== READING MODE (ruler only) ===== */
 #readeasy-ruler {
   position: fixed;
   left: 0;
