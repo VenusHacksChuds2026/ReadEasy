@@ -327,6 +327,15 @@ SLIDERS.forEach(({ id, key, valId, fmt }) => {
   });
 });
 
+document.getElementById('btn-reset-prefs').addEventListener('click', async () => {
+  await chrome.storage.local.set({ readingPrefs: PREF_DEFAULTS });
+  SLIDERS.forEach(({ id, key, valId, fmt }) => {
+    document.getElementById(id).value = PREF_DEFAULTS[key];
+    document.getElementById(valId).textContent = fmt(PREF_DEFAULTS[key]);
+  });
+  sendToContent('SET_READING_PREFS', { prefs: PREF_DEFAULTS });
+});
+
 // ===== TTS =====
 
 let ttsState = 'stopped';
