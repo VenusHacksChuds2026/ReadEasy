@@ -97,7 +97,7 @@ document.getElementById('btn-simplify').addEventListener('click', async function
 
   if (isSimplified) {
     await sendToContent('RESTORE_ORIGINAL');
-    this.innerHTML = '<span>✨</span> Simplify Page';
+    this.innerHTML = '<img src="../images/simplify_mode.png" class="ai-btn-icon" alt=""> Simplify Page';
     this.dataset.simplified = '';
     resultEl.classList.add('hidden');
     return;
@@ -119,7 +119,7 @@ document.getElementById('btn-simplify').addEventListener('click', async function
     resultEl.textContent = '✓ Page simplified to easier language.';
     resultEl.className = 'ai-result';
   } else {
-    this.innerHTML = '<span>✨</span> Simplify Page';
+    this.innerHTML = '<img src="../images/simplify_mode.png" class="ai-btn-icon" alt=""> Simplify Page';
     resultEl.textContent = response?.error || 'Could not simplify. Check your API key in settings.';
     resultEl.className = 'ai-result error';
   }
