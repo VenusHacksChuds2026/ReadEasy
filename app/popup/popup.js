@@ -139,7 +139,7 @@ document.getElementById('btn-summarize').addEventListener('click', async functio
   if (!contentRes?.content) {
     this.disabled = false;
     this.classList.remove('loading');
-    this.innerHTML = '<span>📋</span> Summarize Page';
+    this.innerHTML = '<img src="../images/summarize_mode.png" class="ai-btn-icon" alt=""> Summarize Page';
     resultEl.textContent = 'Could not read page content.';
     resultEl.className = 'ai-result error';
     resultEl.classList.remove('hidden');
@@ -154,7 +154,7 @@ document.getElementById('btn-summarize').addEventListener('click', async functio
 
   this.disabled = false;
   this.classList.remove('loading');
-  this.innerHTML = '<span>📋</span> Summarize Page';
+  this.innerHTML = '<img src="../images/summarize_mode.png" class="ai-btn-icon" alt=""> Summarize Page';
 
   if (summaryRes?.summary) {
     resultEl.innerHTML = renderMarkdown(summaryRes.summary);
