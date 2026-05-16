@@ -265,6 +265,13 @@ body {
   white-space: nowrap;
 }
 
+.ai-btn-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
 .ai-btn:hover:not(:disabled) {
   background: #ddeaf0;
   border-color: #8bbccc;
