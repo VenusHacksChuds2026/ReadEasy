@@ -29,6 +29,7 @@ async function loadState() {
 
   loadIssues();
   checkApiKey();
+  loadReadingPrefs();
 }
 
 async function loadIssues() {
@@ -201,6 +202,58 @@ function renderMarkdown(text) {
   if (inList) out.push('</ul>');
   return out.join('');
 }
+
+// ===== Reading Controls =====
+
+const PREF_DEFAULTS = { fontSize: 100, lineHeight: 1.5, letterSpacing: 0, wordSpacing: 0 };
+
+const SLIDERS = [
+  { id: 'ctrl-font-size',      key: 'fontSize',      valId: 'val-font-size',      fmt: v => v + '%' },
+  { id: 'ctrl-line-height',    key: 'lineHeight',    valId: 'val-line-height',    fmt: v => parseFloat(v).toFixed(1) },
+  { id: 'ctrl-letter-spacing', key: 'letterSpacing', valId: 'val-letter-spacing', fmt: v => v + 'px' },
+  { id: 'ctrl-word-spacing',   key: 'wordSpacing',   valId: 'val-word-spacing',   fmt: v => v + 'px' },
+];
+
+async function loadReadingPrefs() {
+  const { readingPrefs = {} } = await chrome.storage.local.get('readingPrefs');
+  const prefs = { ...PREF_DEFAULTS, ...readingPrefs };
+  SLIDERS.forEach(({ id, key, valId, fmt }) => {
+    document.getElementById(id).value = prefs[key];
+    document.getElementById(valId).textContent = fmt(prefs[key]);
+  });
+}
+
+SLIDERS.forEach(({ id, key, valId, fmt }) => {
+  document.getElementById(id).addEventListener('input', async e => {
+    const val = parseFloat(e.target.value);
+    document.getElementById(valId).textContent = fmt(val);
+    const { readingPrefs = {} } = await chrome.storage.local.get('readingPrefs');
+    const prefs = { ...PREF_DEFAULTS, ...readingPrefs, [key]: val };
+    await chrome.storage.local.set({ readingPrefs: prefs });
+    sendToContent('SET_READING_PREFS', { prefs });
+  });
+});
+
+// ===== TTS =====
+
+let ttsActive = false;
+
+document.getElementById('btn-tts').addEventListener('click', async () => {
+  const btn = document.getElementById('btn-tts');
+  if (ttsActive) {
+    await sendToContent('STOP_TTS');
+    ttsActive = false;
+    btn.textContent = '▶ Read Aloud';
+    btn.classList.remove('active');
+  } else {
+    const res = await sendToContent('START_TTS');
+    if (res?.started) {
+      ttsActive = true;
+      btn.textContent = '⏹ Stop Reading';
+      btn.classList.add('active');
+    }
+  }
+});
 
 // Init
 loadState();

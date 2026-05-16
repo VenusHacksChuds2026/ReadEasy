@@ -210,6 +210,38 @@ async function simplifyPage() {
   return { success: false, error: 'No simplified text returned.' };
 }
 
+function applyReadingPrefs({ fontSize = 100, lineHeight = 1.5, letterSpacing = 0, wordSpacing = 0 }) {
+  const html = document.documentElement;
+  document.body.style.zoom = fontSize / 100;
+  html.style.setProperty('--re-line-height', lineHeight);
+  html.style.setProperty('--re-letter-spacing', letterSpacing + 'px');
+  html.style.setProperty('--re-word-spacing', wordSpacing + 'px');
+  html.setAttribute('data-re-prefs', '1');
+}
+
+let ttsTimer = null;
+
+function startTTS() {
+  window.speechSynthesis.cancel();
+  const main = findMainContent();
+  const text = main.innerText.replace(/\s+/g, ' ').trim();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.onend = () => { if (ttsTimer) { clearInterval(ttsTimer); ttsTimer = null; } };
+  window.speechSynthesis.speak(utterance);
+  // Workaround for Chrome pausing synthesis after ~15s
+  ttsTimer = setInterval(() => {
+    if (!window.speechSynthesis.speaking) { clearInterval(ttsTimer); ttsTimer = null; return; }
+    window.speechSynthesis.pause();
+    window.speechSynthesis.resume();
+  }, 10000);
+  return true;
+}
+
+function stopTTS() {
+  if (ttsTimer) { clearInterval(ttsTimer); ttsTimer = null; }
+  window.speechSynthesis.cancel();
+}
+
 function restoreOriginal() {
   document.querySelectorAll('.readeasy-simplified').forEach(el => {
     if (el.dataset.originalText) el.textContent = el.dataset.originalText;
@@ -225,10 +257,11 @@ function getPageContent() {
 
 async function init() {
   try {
-    const { activeModes = {} } = await chrome.storage.local.get('activeModes');
+    const { activeModes = {}, readingPrefs } = await chrome.storage.local.get(['activeModes', 'readingPrefs']);
     for (const [mode, enabled] of Object.entries(activeModes)) {
       if (enabled) setMode(mode, true);
     }
+    if (readingPrefs) applyReadingPrefs(readingPrefs);
   } catch {
     // storage unavailable
   }
@@ -256,6 +289,20 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
     case 'GET_PAGE_CONTENT':
       sendResponse({ content: getPageContent(), title: document.title });
+      break;
+
+    case 'SET_READING_PREFS':
+      applyReadingPrefs(message.prefs);
+      sendResponse({ success: true });
+      break;
+
+    case 'START_TTS':
+      sendResponse({ started: startTTS() });
+      break;
+
+    case 'STOP_TTS':
+      stopTTS();
+      sendResponse({ success: true });
       break;
 
     case 'GET_ACTIVE_MODES': {

@@ -88,6 +88,41 @@
       </div>
     </section>
 
+    <section class="section">
+      <h2 class="section-title">Reading Controls</h2>
+      <div class="controls-list">
+        <div class="control-row">
+          <div class="control-header">
+            <span class="control-label">Font Size</span>
+            <span class="control-val" id="val-font-size">100%</span>
+          </div>
+          <input type="range" class="control-slider" id="ctrl-font-size" min="75" max="150" value="100" step="5">
+        </div>
+        <div class="control-row">
+          <div class="control-header">
+            <span class="control-label">Line Spacing</span>
+            <span class="control-val" id="val-line-height">1.5</span>
+          </div>
+          <input type="range" class="control-slider" id="ctrl-line-height" min="1" max="3" value="1.5" step="0.1">
+        </div>
+        <div class="control-row">
+          <div class="control-header">
+            <span class="control-label">Letter Spacing</span>
+            <span class="control-val" id="val-letter-spacing">0px</span>
+          </div>
+          <input type="range" class="control-slider" id="ctrl-letter-spacing" min="0" max="5" value="0" step="0.5">
+        </div>
+        <div class="control-row">
+          <div class="control-header">
+            <span class="control-label">Word Spacing</span>
+            <span class="control-val" id="val-word-spacing">0px</span>
+          </div>
+          <input type="range" class="control-slider" id="ctrl-word-spacing" min="0" max="10" value="0" step="1">
+        </div>
+      </div>
+      <button id="btn-tts" class="tts-btn">&#9654; Read Aloud</button>
+    </section>
+
     <section class="section ai-section">
       <h2 class="section-title">AI Features</h2>
       <div id="no-api-key" class="api-key-warning hidden">

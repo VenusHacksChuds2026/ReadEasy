@@ -156,6 +156,22 @@ html.readeasy-focus .readeasy-main-content h3 {
   transform: translateY(-50%);
 }
 
+/* ===== READING CONTROLS ===== */
+html[data-re-prefs] p,
+html[data-re-prefs] li,
+html[data-re-prefs] td,
+html[data-re-prefs] blockquote,
+html[data-re-prefs] h1,
+html[data-re-prefs] h2,
+html[data-re-prefs] h3,
+html[data-re-prefs] h4,
+html[data-re-prefs] h5,
+html[data-re-prefs] h6 {
+  line-height: var(--re-line-height) !important;
+  letter-spacing: var(--re-letter-spacing) !important;
+  word-spacing: var(--re-word-spacing) !important;
+}
+
 /* ===== SCREEN READER AID ===== */
 img[data-readeasy-alt="true"] {
   outline: 2px dashed #7ea0b3 !important;
