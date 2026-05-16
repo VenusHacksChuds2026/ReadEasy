@@ -236,23 +236,45 @@ SLIDERS.forEach(({ id, key, valId, fmt }) => {
 
 // ===== TTS =====
 
-let ttsActive = false;
+let ttsState = 'stopped'; // 'stopped' | 'playing' | 'paused'
 
-document.getElementById('btn-tts').addEventListener('click', async () => {
-  const btn = document.getElementById('btn-tts');
-  if (ttsActive) {
-    await sendToContent('STOP_TTS');
-    ttsActive = false;
-    btn.textContent = '▶ Read Aloud';
-    btn.classList.remove('active');
+function updateTTSUI() {
+  const mainBtn = document.getElementById('btn-tts-main');
+  const stopBtn = document.getElementById('btn-tts-stop');
+  if (ttsState === 'stopped') {
+    mainBtn.textContent = '▶ Read Aloud';
+    mainBtn.classList.remove('active');
+    stopBtn.classList.add('hidden');
+  } else if (ttsState === 'playing') {
+    mainBtn.textContent = '⏸ Pause';
+    mainBtn.classList.add('active');
+    stopBtn.classList.remove('hidden');
   } else {
-    const res = await sendToContent('START_TTS');
-    if (res?.started) {
-      ttsActive = true;
-      btn.textContent = '⏹ Stop Reading';
-      btn.classList.add('active');
-    }
+    mainBtn.textContent = '▶ Resume';
+    mainBtn.classList.add('active');
+    stopBtn.classList.remove('hidden');
   }
+}
+
+document.getElementById('btn-tts-main').addEventListener('click', async () => {
+  if (ttsState === 'stopped') {
+    const res = await sendToContent('START_TTS');
+    if (res?.started) { ttsState = 'playing'; updateTTSUI(); }
+  } else if (ttsState === 'playing') {
+    await sendToContent('PAUSE_TTS');
+    ttsState = 'paused';
+    updateTTSUI();
+  } else {
+    await sendToContent('RESUME_TTS');
+    ttsState = 'playing';
+    updateTTSUI();
+  }
+});
+
+document.getElementById('btn-tts-stop').addEventListener('click', async () => {
+  await sendToContent('STOP_TTS');
+  ttsState = 'stopped';
+  updateTTSUI();
 });
 
 // Init

@@ -221,20 +221,34 @@ function applyReadingPrefs({ fontSize = 100, lineHeight = 1.5, letterSpacing = 0
 
 let ttsTimer = null;
 
-function startTTS() {
-  window.speechSynthesis.cancel();
-  const main = findMainContent();
-  const text = main.innerText.replace(/\s+/g, ' ').trim();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.onend = () => { if (ttsTimer) { clearInterval(ttsTimer); ttsTimer = null; } };
-  window.speechSynthesis.speak(utterance);
-  // Workaround for Chrome pausing synthesis after ~15s
+function keepSynthAlive() {
+  if (ttsTimer) clearInterval(ttsTimer);
   ttsTimer = setInterval(() => {
-    if (!window.speechSynthesis.speaking) { clearInterval(ttsTimer); ttsTimer = null; return; }
+    if (!window.speechSynthesis.speaking || window.speechSynthesis.paused) return;
     window.speechSynthesis.pause();
     window.speechSynthesis.resume();
   }, 10000);
+}
+
+function startTTS() {
+  window.speechSynthesis.cancel();
+  const selected = window.getSelection().toString().trim();
+  const text = selected || findMainContent().innerText.replace(/\s+/g, ' ').trim();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.onend = stopTTS;
+  window.speechSynthesis.speak(utterance);
+  keepSynthAlive();
   return true;
+}
+
+function pauseTTS() {
+  window.speechSynthesis.pause();
+  if (ttsTimer) { clearInterval(ttsTimer); ttsTimer = null; }
+}
+
+function resumeTTS() {
+  window.speechSynthesis.resume();
+  keepSynthAlive();
 }
 
 function stopTTS() {
@@ -298,6 +312,16 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
     case 'START_TTS':
       sendResponse({ started: startTTS() });
+      break;
+
+    case 'PAUSE_TTS':
+      pauseTTS();
+      sendResponse({ success: true });
+      break;
+
+    case 'RESUME_TTS':
+      resumeTTS();
+      sendResponse({ success: true });
       break;
 
     case 'STOP_TTS':

@@ -365,9 +365,14 @@ body {
   cursor: pointer;
 }
 
-.tts-btn {
+.tts-controls {
+  display: flex;
+  gap: 6px;
   margin-top: 10px;
-  width: 100%;
+}
+
+.tts-btn {
+  flex: 1;
   padding: 6px;
   background: #eef4f7;
   border: 1px solid #b8d0db;
@@ -382,6 +387,10 @@ body {
 .tts-btn:hover {
   background: #ddeaf0;
   border-color: #8bbccc;
+}
+
+.tts-stop-btn {
+  flex: 0 0 34px;
 }
 
 .tts-btn.active {
