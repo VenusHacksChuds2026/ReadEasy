@@ -122,6 +122,68 @@ html[data-re-prefs] h6 {
   word-spacing: var(--re-word-spacing) !important;
 }
 
+/* ===== COLOR PALETTE ===== */
+html[data-re-palette],
+html[data-re-palette] body {
+  background-color: var(--re-palette-bg) !important;
+}
+
+html[data-re-palette] body div,
+html[data-re-palette] body section,
+html[data-re-palette] body article,
+html[data-re-palette] body main,
+html[data-re-palette] body aside,
+html[data-re-palette] body nav,
+html[data-re-palette] body header,
+html[data-re-palette] body footer,
+html[data-re-palette] body p,
+html[data-re-palette] body li,
+html[data-re-palette] body td,
+html[data-re-palette] body th,
+html[data-re-palette] body h1,
+html[data-re-palette] body h2,
+html[data-re-palette] body h3,
+html[data-re-palette] body h4,
+html[data-re-palette] body h5,
+html[data-re-palette] body h6,
+html[data-re-palette] body span,
+html[data-re-palette] body label,
+html[data-re-palette] body blockquote,
+html[data-re-palette] body strong,
+html[data-re-palette] body em {
+  background-color: var(--re-palette-bg) !important;
+  color: var(--re-palette-text) !important;
+}
+
+html[data-re-palette] body a,
+html[data-re-palette] body a * {
+  color: var(--re-palette-link) !important;
+}
+
+html[data-re-palette="deuteranopia"] body img,
+html[data-re-palette="deuteranopia"] body canvas,
+html[data-re-palette="deuteranopia"] body video {
+  filter: hue-rotate(50deg) saturate(1.5) !important;
+}
+
+html[data-re-palette="protanopia"] body img,
+html[data-re-palette="protanopia"] body canvas,
+html[data-re-palette="protanopia"] body video {
+  filter: hue-rotate(-30deg) saturate(1.3) brightness(1.1) !important;
+}
+
+html[data-re-palette="tritanopia"] body img,
+html[data-re-palette="tritanopia"] body canvas,
+html[data-re-palette="tritanopia"] body video {
+  filter: hue-rotate(180deg) saturate(1.3) !important;
+}
+
+html[data-re-palette="monochrome"] body img,
+html[data-re-palette="monochrome"] body canvas,
+html[data-re-palette="monochrome"] body video {
+  filter: grayscale(1) contrast(1.1) !important;
+}
+
 /* ===== SCREEN READER AID ===== */
 img[data-readeasy-alt="true"] {
   outline: 2px dashed #7ea0b3 !important;

@@ -178,34 +178,19 @@ async function simplifyPage() {
   return { success: false, error: 'No simplified text returned.' };
 }
 
-const CB_IMAGE_FILTERS = {
-  deuteranopia: 'hue-rotate(50deg) saturate(1.5)',
-  protanopia:   'hue-rotate(-30deg) saturate(1.3) brightness(1.1)',
-  tritanopia:   'hue-rotate(180deg) saturate(1.3)',
-  monochrome:   'grayscale(1) contrast(1.1)',
-};
-
 function applyColorPalette(colors, type) {
-  document.getElementById('readeasy-palette')?.remove();
-
-  if (!colors) return;
-
-  const { bg, text, link } = colors;
-  const imgFilter = CB_IMAGE_FILTERS[type] || '';
-
-  const styleEl = document.createElement('style');
-  styleEl.id = 'readeasy-palette';
-  styleEl.textContent = `
-    html, body { background-color: ${bg} !important; }
-    body, body div, body p, body li, body td, body th,
-    body h1, body h2, body h3, body h4, body h5, body h6,
-    body span, body label, body blockquote, body strong, body em {
-      color: ${text} !important;
-    }
-    body a, body a * { color: ${link} !important; }
-    ${imgFilter ? `body img, body canvas, body video { filter: ${imgFilter} !important; }` : ''}
-  `;
-  document.head.appendChild(styleEl);
+  const html = document.documentElement;
+  if (!colors) {
+    html.removeAttribute('data-re-palette');
+    html.style.removeProperty('--re-palette-bg');
+    html.style.removeProperty('--re-palette-text');
+    html.style.removeProperty('--re-palette-link');
+    return;
+  }
+  html.style.setProperty('--re-palette-bg', colors.bg);
+  html.style.setProperty('--re-palette-text', colors.text);
+  html.style.setProperty('--re-palette-link', colors.link);
+  html.setAttribute('data-re-palette', type || 'custom');
 }
 
 function applyReadingPrefs({ fontSize = 100, lineHeight = 1.5, letterSpacing = 0, wordSpacing = 0 }) {
