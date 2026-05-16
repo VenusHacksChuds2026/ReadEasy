@@ -295,9 +295,22 @@ body {
   line-height: 1.55;
   max-height: 160px;
   overflow-y: auto;
-  white-space: pre-line;
   color: #1a3340;
 }
+
+.ai-result p { margin: 0 0 6px; }
+.ai-result p:last-child { margin-bottom: 0; }
+.ai-result h1, .ai-result h2, .ai-result h3 {
+  font-size: 13px;
+  font-weight: 700;
+  margin: 8px 0 4px;
+  color: #1a3340;
+}
+.ai-result ul {
+  margin: 4px 0 6px;
+  padding-left: 16px;
+}
+.ai-result li { margin-bottom: 3px; }
 
 .ai-result.error {
   background: #fff5f5;

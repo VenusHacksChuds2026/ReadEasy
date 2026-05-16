@@ -154,7 +154,7 @@ document.getElementById('btn-summarize').addEventListener('click', async functio
   this.innerHTML = '<span>📋</span> Summarize Page';
 
   if (summaryRes?.summary) {
-    resultEl.textContent = summaryRes.summary;
+    resultEl.innerHTML = renderMarkdown(summaryRes.summary);
     resultEl.className = 'ai-result';
   } else {
     resultEl.textContent = summaryRes?.error || 'Could not summarize. Check your API key in settings.';
@@ -162,6 +162,45 @@ document.getElementById('btn-summarize').addEventListener('click', async functio
   }
   resultEl.classList.remove('hidden');
 });
+
+function renderMarkdown(text) {
+  const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const inline = s => esc(s)
+    .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+  const out = [];
+  let inList = false;
+
+  for (const line of text.split('\n')) {
+    const t = line.trim();
+    if (t.startsWith('### ')) {
+      if (inList) { out.push('</ul>'); inList = false; }
+      out.push(`<h3>${inline(t.slice(4))}</h3>`);
+    } else if (t.startsWith('## ')) {
+      if (inList) { out.push('</ul>'); inList = false; }
+      out.push(`<h2>${inline(t.slice(3))}</h2>`);
+    } else if (t.startsWith('# ')) {
+      if (inList) { out.push('</ul>'); inList = false; }
+      out.push(`<h1>${inline(t.slice(2))}</h1>`);
+    } else if (/^[-*] /.test(t)) {
+      if (!inList) { out.push('<ul>'); inList = true; }
+      out.push(`<li>${inline(t.slice(2))}</li>`);
+    } else if (/^\d+\. /.test(t)) {
+      if (!inList) { out.push('<ul>'); inList = true; }
+      out.push(`<li>${inline(t.replace(/^\d+\. /, ''))}</li>`);
+    } else if (t === '') {
+      if (inList) { out.push('</ul>'); inList = false; }
+    } else {
+      if (inList) { out.push('</ul>'); inList = false; }
+      out.push(`<p>${inline(t)}</p>`);
+    }
+  }
+
+  if (inList) out.push('</ul>');
+  return out.join('');
+}
 
 // Init
 loadState();
