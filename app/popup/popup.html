@@ -126,6 +126,29 @@
       </div>
     </section>
 
+    <section class="section">
+      <h2 class="section-title">Color Palette</h2>
+      <p class="palette-sublabel">Colorblind-Friendly</p>
+      <div class="palette-presets">
+        <button class="palette-btn active" data-palette="none">Default</button>
+        <button class="palette-btn" data-palette="deuteranopia">Deuteranopia</button>
+        <button class="palette-btn" data-palette="protanopia">Protanopia</button>
+        <button class="palette-btn" data-palette="tritanopia">Tritanopia</button>
+        <button class="palette-btn" data-palette="monochrome">Monochrome</button>
+      </div>
+      <p class="palette-sublabel palette-sublabel--gap">Custom</p>
+      <div class="color-pickers">
+        <label class="color-picker-row">
+          <span>Background</span>
+          <input type="color" id="color-bg" value="#ffffff">
+        </label>
+        <label class="color-picker-row">
+          <span>Text</span>
+          <input type="color" id="color-text" value="#222222">
+        </label>
+      </div>
+    </section>
+
     <section class="section ai-section">
       <h2 class="section-title">AI Features</h2>
       <div id="no-api-key" class="api-key-warning hidden">

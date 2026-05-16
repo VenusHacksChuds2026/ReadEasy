@@ -337,6 +337,66 @@ body {
   color: #c53030;
 }
 
+/* ===== COLOR PALETTE ===== */
+.palette-sublabel {
+  font-size: 11px;
+  color: #999;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.palette-sublabel--gap { margin-top: 10px; }
+
+.palette-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.palette-btn {
+  font-size: 10px;
+  padding: 3px 9px;
+  border: 1px solid #b8d0db;
+  border-radius: 12px;
+  background: #eef4f7;
+  color: #3a6278;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.palette-btn:hover { background: #ddeaf0; border-color: #8bbccc; }
+
+.palette-btn.active {
+  background: #7ea0b3;
+  border-color: #7ea0b3;
+  color: #fff;
+}
+
+.color-pickers {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.color-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #3a6278;
+  cursor: pointer;
+}
+
+.color-picker-row input[type="color"] {
+  width: 28px;
+  height: 22px;
+  border: 1px solid #b8d0db;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 1px;
+}
+
 /* ===== READING CONTROLS ===== */
 .controls-list {
   display: flex;

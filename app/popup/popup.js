@@ -31,6 +31,7 @@ async function loadState() {
   checkApiKey();
   loadReadingPrefs();
   loadTTSState();
+  loadColorPalette();
 }
 
 async function loadIssues() {
@@ -203,6 +204,50 @@ function renderMarkdown(text) {
   if (inList) out.push('</ul>');
   return out.join('');
 }
+
+// ===== Color Palette =====
+
+const PALETTES = {
+  none:         null,
+  deuteranopia: { bg: '#FEFAE0', text: '#023047', link: '#E07B39' },
+  protanopia:   { bg: '#EAF4FB', text: '#1B2A4A', link: '#D4A017' },
+  tritanopia:   { bg: '#FFF0F0', text: '#1B4332', link: '#C0392B' },
+  monochrome:   { bg: '#FFFFFF', text: '#111111', link: '#444444' },
+};
+
+async function loadColorPalette() {
+  const { activePalette = 'none', colorPalette } = await chrome.storage.local.get(['activePalette', 'colorPalette']);
+  document.querySelectorAll('.palette-btn').forEach(btn =>
+    btn.classList.toggle('active', btn.dataset.palette === activePalette)
+  );
+  if (activePalette === 'custom' && colorPalette) {
+    document.getElementById('color-bg').value = colorPalette.bg;
+    document.getElementById('color-text').value = colorPalette.text;
+  }
+}
+
+async function applyPalette(name, colors) {
+  document.querySelectorAll('.palette-btn').forEach(btn =>
+    btn.classList.toggle('active', btn.dataset.palette === name)
+  );
+  await chrome.storage.local.set({ activePalette: name, colorPalette: colors });
+  sendToContent('SET_COLOR_PALETTE', { colors });
+}
+
+document.querySelectorAll('.palette-btn').forEach(btn => {
+  btn.addEventListener('click', () => applyPalette(btn.dataset.palette, PALETTES[btn.dataset.palette]));
+});
+
+['color-bg', 'color-text'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => {
+    const colors = {
+      bg:   document.getElementById('color-bg').value,
+      text: document.getElementById('color-text').value,
+      link: document.getElementById('color-text').value,
+    };
+    applyPalette('custom', colors);
+  });
+});
 
 // ===== Reading Controls =====
 

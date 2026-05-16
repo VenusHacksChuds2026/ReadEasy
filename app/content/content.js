@@ -178,6 +178,27 @@ async function simplifyPage() {
   return { success: false, error: 'No simplified text returned.' };
 }
 
+function applyColorPalette(colors) {
+  let styleEl = document.getElementById('readeasy-palette');
+  if (!colors) {
+    if (styleEl) styleEl.remove();
+    return;
+  }
+  if (!styleEl) {
+    styleEl = document.createElement('style');
+    styleEl.id = 'readeasy-palette';
+    document.head.appendChild(styleEl);
+  }
+  const { bg, text, link } = colors;
+  styleEl.textContent = `
+    html, body { background-color: ${bg} !important; }
+    body, body p, body li, body td, body th,
+    body h1, body h2, body h3, body h4, body h5, body h6,
+    body span, body label, body blockquote { color: ${text} !important; }
+    body a { color: ${link} !important; }
+  `;
+}
+
 function applyReadingPrefs({ fontSize = 100, lineHeight = 1.5, letterSpacing = 0, wordSpacing = 0 }) {
   const html = document.documentElement;
   document.body.style.zoom = fontSize / 100;
@@ -239,11 +260,12 @@ function getPageContent() {
 
 async function init() {
   try {
-    const { activeModes = {}, readingPrefs } = await chrome.storage.local.get(['activeModes', 'readingPrefs']);
+    const { activeModes = {}, readingPrefs, colorPalette } = await chrome.storage.local.get(['activeModes', 'readingPrefs', 'colorPalette']);
     for (const [mode, enabled] of Object.entries(activeModes)) {
       if (enabled) setMode(mode, true);
     }
     if (readingPrefs) applyReadingPrefs(readingPrefs);
+    if (colorPalette) applyColorPalette(colorPalette);
   } catch {
     // storage unavailable
   }
@@ -271,6 +293,11 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
     case 'GET_PAGE_CONTENT':
       sendResponse({ content: getPageContent(), title: document.title });
+      break;
+
+    case 'SET_COLOR_PALETTE':
+      applyColorPalette(message.colors);
+      sendResponse({ success: true });
       break;
 
     case 'SET_READING_PREFS':
