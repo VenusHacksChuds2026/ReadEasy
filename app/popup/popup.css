@@ -246,7 +246,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 2px;
   padding: 5px 8px;
   background: #eef4f7;
   border: 1px solid #b8d0db;
