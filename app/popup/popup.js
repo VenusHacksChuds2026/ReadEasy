@@ -30,6 +30,7 @@ async function loadState() {
   loadIssues();
   checkApiKey();
   loadReadingPrefs();
+  loadTTSState();
 }
 
 async function loadIssues() {
@@ -236,7 +237,15 @@ SLIDERS.forEach(({ id, key, valId, fmt }) => {
 
 // ===== TTS =====
 
-let ttsState = 'stopped'; // 'stopped' | 'playing' | 'paused'
+let ttsState = 'stopped';
+
+async function loadTTSState() {
+  const res = await sendToContent('GET_TTS_STATE');
+  if (res?.speaking && !res?.paused) ttsState = 'playing';
+  else if (res?.paused) ttsState = 'paused';
+  else ttsState = 'stopped';
+  updateTTSUI();
+} // 'stopped' | 'playing' | 'paused'
 
 function updateTTSUI() {
   const mainBtn = document.getElementById('btn-tts-main');

@@ -310,6 +310,13 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       sendResponse({ success: true });
       break;
 
+    case 'GET_TTS_STATE':
+      sendResponse({
+        speaking: window.speechSynthesis.speaking,
+        paused: window.speechSynthesis.paused,
+      });
+      break;
+
     case 'START_TTS':
       sendResponse({ started: startTTS() });
       break;
