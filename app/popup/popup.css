@@ -347,6 +347,25 @@ body {
 
 .palette-sublabel--gap { margin-top: 10px; }
 
+.palette-custom-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+
+.palette-custom-header .palette-sublabel {
+  margin: 0;
+}
+
+.palette-note {
+  font-size: 10.5px;
+  color: #aaa;
+  margin-top: 8px;
+  text-align: center;
+}
+
 .palette-presets {
   display: flex;
   flex-wrap: wrap;

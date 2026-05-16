@@ -207,45 +207,78 @@ function renderMarkdown(text) {
 
 // ===== Color Palette =====
 
-const PALETTES = {
-  none:         null,
+const PALETTE_PRESETS = {
   deuteranopia: { bg: '#FEFAE0', text: '#023047', link: '#E07B39' },
   protanopia:   { bg: '#EAF4FB', text: '#1B2A4A', link: '#D4A017' },
   tritanopia:   { bg: '#FFF0F0', text: '#1B4332', link: '#C0392B' },
   monochrome:   { bg: '#FFFFFF', text: '#111111', link: '#444444' },
 };
 
-async function loadColorPalette() {
-  const { activePalette = 'none', colorPalette } = await chrome.storage.local.get(['activePalette', 'colorPalette']);
-  document.querySelectorAll('.palette-btn').forEach(btn =>
+function computeEffective(activePalette, customEnabled, customColors) {
+  if (customEnabled && customColors) {
+    const type = (activePalette && activePalette !== 'none') ? activePalette : 'custom';
+    return { colors: customColors, type };
+  }
+  if (activePalette && activePalette !== 'none') {
+    return { colors: PALETTE_PRESETS[activePalette], type: activePalette };
+  }
+  return { colors: null, type: 'none' };
+}
+
+function updatePaletteUI(activePalette, customEnabled) {
+  document.querySelectorAll('.palette-btn[data-palette]').forEach(btn =>
     btn.classList.toggle('active', btn.dataset.palette === activePalette)
   );
-  if (activePalette === 'custom' && colorPalette) {
-    document.getElementById('color-bg').value = colorPalette.bg;
-    document.getElementById('color-text').value = colorPalette.text;
+  const customBtn = document.getElementById('btn-custom-toggle');
+  customBtn.textContent = customEnabled ? 'Remove' : 'Apply';
+  customBtn.classList.toggle('active', customEnabled);
+}
+
+async function applyPaletteState() {
+  const { activePalette = 'none', customEnabled = false, customColors } =
+    await chrome.storage.local.get(['activePalette', 'customEnabled', 'customColors']);
+  const effective = computeEffective(activePalette, customEnabled, customColors);
+  sendToContent('SET_COLOR_PALETTE', effective);
+  updatePaletteUI(activePalette, customEnabled);
+}
+
+async function loadColorPalette() {
+  const { activePalette = 'none', customEnabled = false, customColors } =
+    await chrome.storage.local.get(['activePalette', 'customEnabled', 'customColors']);
+  updatePaletteUI(activePalette, customEnabled);
+  if (customColors) {
+    document.getElementById('color-bg').value = customColors.bg;
+    document.getElementById('color-text').value = customColors.text;
   }
 }
 
-async function applyPalette(name, colors) {
-  document.querySelectorAll('.palette-btn').forEach(btn =>
-    btn.classList.toggle('active', btn.dataset.palette === name)
-  );
-  await chrome.storage.local.set({ activePalette: name, colorPalette: colors });
-  sendToContent('SET_COLOR_PALETTE', { colors, type: name });
-}
+document.querySelectorAll('.palette-btn[data-palette]').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const name = btn.dataset.palette;
+    if (name === 'none') {
+      await chrome.storage.local.set({ activePalette: 'none', customEnabled: false });
+    } else {
+      await chrome.storage.local.set({ activePalette: name });
+    }
+    applyPaletteState();
+  });
+});
 
-document.querySelectorAll('.palette-btn').forEach(btn => {
-  btn.addEventListener('click', () => applyPalette(btn.dataset.palette, PALETTES[btn.dataset.palette]));
+document.getElementById('btn-custom-toggle').addEventListener('click', async () => {
+  const { customEnabled = false } = await chrome.storage.local.get('customEnabled');
+  await chrome.storage.local.set({ customEnabled: !customEnabled });
+  applyPaletteState();
 });
 
 ['color-bg', 'color-text'].forEach(id => {
-  document.getElementById(id).addEventListener('change', () => {
-    const colors = {
+  document.getElementById(id).addEventListener('change', async () => {
+    const customColors = {
       bg:   document.getElementById('color-bg').value,
       text: document.getElementById('color-text').value,
       link: document.getElementById('color-text').value,
     };
-    applyPalette('custom', colors);
+    await chrome.storage.local.set({ customColors });
+    applyPaletteState();
   });
 });
 

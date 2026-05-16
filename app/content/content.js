@@ -178,6 +178,13 @@ async function simplifyPage() {
   return { success: false, error: 'No simplified text returned.' };
 }
 
+const PALETTE_COLORS = {
+  deuteranopia: { bg: '#FEFAE0', text: '#023047', link: '#E07B39' },
+  protanopia:   { bg: '#EAF4FB', text: '#1B2A4A', link: '#D4A017' },
+  tritanopia:   { bg: '#FFF0F0', text: '#1B4332', link: '#C0392B' },
+  monochrome:   { bg: '#FFFFFF', text: '#111111', link: '#444444' },
+};
+
 function applyColorPalette(colors, type) {
   const html = document.documentElement;
   if (!colors) {
@@ -254,12 +261,28 @@ function getPageContent() {
 
 async function init() {
   try {
-    const { activeModes = {}, readingPrefs, colorPalette, activePalette } = await chrome.storage.local.get(['activeModes', 'readingPrefs', 'colorPalette', 'activePalette']);
+    const {
+      activeModes = {},
+      readingPrefs,
+      activePalette = 'none',
+      customEnabled = false,
+      customColors,
+    } = await chrome.storage.local.get(['activeModes', 'readingPrefs', 'activePalette', 'customEnabled', 'customColors']);
+
     for (const [mode, enabled] of Object.entries(activeModes)) {
       if (enabled) setMode(mode, true);
     }
     if (readingPrefs) applyReadingPrefs(readingPrefs);
-    if (colorPalette) applyColorPalette(colorPalette, activePalette);
+
+    let colors = null, type = 'none';
+    if (customEnabled && customColors) {
+      colors = customColors;
+      type = activePalette !== 'none' ? activePalette : 'custom';
+    } else if (activePalette !== 'none') {
+      colors = PALETTE_COLORS[activePalette];
+      type = activePalette;
+    }
+    if (colors) applyColorPalette(colors, type);
   } catch {
     // storage unavailable
   }

@@ -136,7 +136,10 @@
         <button class="palette-btn" data-palette="tritanopia">Tritanopia</button>
         <button class="palette-btn" data-palette="monochrome">Monochrome</button>
       </div>
-      <p class="palette-sublabel palette-sublabel--gap">Custom</p>
+      <div class="palette-custom-header">
+        <p class="palette-sublabel">Custom Colors</p>
+        <button id="btn-custom-toggle" class="palette-btn">Apply</button>
+      </div>
       <div class="color-pickers">
         <label class="color-picker-row">
           <span>Background</span>
@@ -147,6 +150,7 @@
           <input type="color" id="color-text" value="#222222">
         </label>
       </div>
+      <p class="palette-note">↻ Reload the page to apply palette changes.</p>
     </section>
 
     <section class="section ai-section">
