@@ -1,5 +1,4 @@
 const MODES = {
-  reading: 'readeasy-reading',
   highContrast: 'readeasy-high-contrast',
   dyslexia: 'readeasy-dyslexia',
   focus: 'readeasy-focus',
@@ -10,9 +9,9 @@ function setMode(mode, enabled) {
   const cls = MODES[mode];
   if (!cls) return;
   document.documentElement.classList.toggle(cls, enabled);
-  if (mode === 'reading') {
-    if (enabled) markReadingElements();
-    else cleanupReadingMode();
+  if (mode === 'focus') {
+    if (enabled) { markFocusElements(); initReadingRuler(); }
+    else cleanupFocusMode();
   }
   if (mode === 'screenReader' && enabled) {
     runScreenReaderAid();
@@ -45,39 +44,58 @@ function findMainContent() {
   return candidates[0] || document.body;
 }
 
-function markReadingElements() {
+function markFocusElements() {
   const main = findMainContent();
   main.classList.add('readeasy-main-content');
 
-  const hideSelectors = [
+  const dimSelectors = [
     'nav', 'aside', 'footer',
     '[class*="sidebar"]', '[id*="sidebar"]',
     '[class*="navigation"]', '[id*="navigation"]',
     '[class*="navbar"]', '[id*="navbar"]',
     '[class*="advertisement"]', '[class*="-ad-"]', '[id*="-ad-"]',
-    '[class*="cookie"]', '[class*="banner"]',
-    '[class*="popup"]', '[class*="overlay"]',
-    '[class*="modal"]', '[class*="newsletter"]',
     '[class*="social-share"]', '[class*="share-buttons"]',
     '[class*="related-posts"]', '[class*="recommended"]',
   ];
 
-  hideSelectors.forEach(sel => {
+  dimSelectors.forEach(sel => {
     document.querySelectorAll(sel).forEach(el => {
       if (!el.contains(main) && !main.contains(el) && el !== main) {
-        el.classList.add('readeasy-hide-in-reading');
+        el.classList.add('readeasy-dim-element');
       }
     });
   });
 }
 
-function cleanupReadingMode() {
+function cleanupFocusMode() {
   document.querySelectorAll('.readeasy-main-content').forEach(el =>
     el.classList.remove('readeasy-main-content')
   );
-  document.querySelectorAll('.readeasy-hide-in-reading').forEach(el =>
-    el.classList.remove('readeasy-hide-in-reading')
+  document.querySelectorAll('.readeasy-dim-element').forEach(el =>
+    el.classList.remove('readeasy-dim-element')
   );
+  cleanupReadingRuler();
+}
+
+function onRulerMouseMove(e) {
+  const ruler = document.getElementById('readeasy-ruler');
+  if (ruler) ruler.style.top = e.clientY + 'px';
+}
+
+function initReadingRuler() {
+  let ruler = document.getElementById('readeasy-ruler');
+  if (!ruler) {
+    ruler = document.createElement('div');
+    ruler.id = 'readeasy-ruler';
+    document.body.appendChild(ruler);
+  }
+  document.addEventListener('mousemove', onRulerMouseMove);
+}
+
+function cleanupReadingRuler() {
+  document.removeEventListener('mousemove', onRulerMouseMove);
+  const ruler = document.getElementById('readeasy-ruler');
+  if (ruler) ruler.remove();
 }
 
 function detectIssues() {
