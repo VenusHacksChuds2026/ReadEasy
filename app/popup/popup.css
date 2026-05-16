@@ -140,16 +140,10 @@ body {
 
 .mode-icon {
   font-size: 17px;
-  width: 22px;
-  height: 22px;
-  text-align: center;
+  height: 26px;
+  width: auto;
   flex-shrink: 0;
   object-fit: contain;
-}
-
-.mode-icon--lg {
-  width: 32px;
-  height: 32px;
 }
 
 .mode-text {
@@ -266,8 +260,8 @@ body {
 }
 
 .ai-btn-icon {
-  width: 26px;
   height: 26px;
+  width: auto;
   object-fit: contain;
   flex-shrink: 0;
 }
