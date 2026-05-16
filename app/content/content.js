@@ -178,41 +178,34 @@ async function simplifyPage() {
   return { success: false, error: 'No simplified text returned.' };
 }
 
-const CB_FILTERS = {
-  deuteranopia: `<feColorMatrix type="matrix" values="0.625 0.375 0 0 0  0.7 0.3 0 0 0  0 0.3 0.7 0 0  0 0 0 1 0"/>`,
-  protanopia:   `<feColorMatrix type="matrix" values="0.567 0.433 0 0 0  0.558 0 0.442 0 0  0 0.242 0.758 0 0  0 0 0 1 0"/>`,
-  tritanopia:   `<feColorMatrix type="matrix" values="0.95 0.05 0 0 0  0 0.433 0.567 0 0  0 0.475 0.525 0 0  0 0 0 1 0"/>`,
-  monochrome:   `<feColorMatrix type="saturate" values="0"/>`,
+const CB_IMAGE_FILTERS = {
+  deuteranopia: 'hue-rotate(50deg) saturate(1.5)',
+  protanopia:   'hue-rotate(-30deg) saturate(1.3) brightness(1.1)',
+  tritanopia:   'hue-rotate(180deg) saturate(1.3)',
+  monochrome:   'grayscale(1) contrast(1.1)',
 };
 
 function applyColorPalette(colors, type) {
   document.getElementById('readeasy-palette')?.remove();
-  document.getElementById('readeasy-cbf-svg')?.remove();
 
   if (!colors) return;
 
   const { bg, text, link } = colors;
-  const hasFilter = type && CB_FILTERS[type];
+  const imgFilter = CB_IMAGE_FILTERS[type] || '';
 
   const styleEl = document.createElement('style');
   styleEl.id = 'readeasy-palette';
   styleEl.textContent = `
     html, body { background-color: ${bg} !important; }
-    body, body p, body li, body td, body th,
+    body, body div, body p, body li, body td, body th,
     body h1, body h2, body h3, body h4, body h5, body h6,
-    body span, body label, body blockquote { color: ${text} !important; }
-    body a { color: ${link} !important; }
-    ${hasFilter ? `body img, body canvas, body video, body svg:not(#readeasy-cbf-svg) { filter: url(#readeasy-cbf) !important; }` : ''}
+    body span, body label, body blockquote, body strong, body em {
+      color: ${text} !important;
+    }
+    body a, body a * { color: ${link} !important; }
+    ${imgFilter ? `body img, body canvas, body video { filter: ${imgFilter} !important; }` : ''}
   `;
   document.head.appendChild(styleEl);
-
-  if (hasFilter) {
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.id = 'readeasy-cbf-svg';
-    svg.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
-    svg.innerHTML = `<defs><filter id="readeasy-cbf">${CB_FILTERS[type]}</filter></defs>`;
-    document.body.prepend(svg);
-  }
 }
 
 function applyReadingPrefs({ fontSize = 100, lineHeight = 1.5, letterSpacing = 0, wordSpacing = 0 }) {
