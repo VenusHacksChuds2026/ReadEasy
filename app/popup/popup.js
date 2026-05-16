@@ -76,7 +76,7 @@ async function toggleMode(mode, enabled) {
 }
 
 function openSettings() {
-  chrome.tabs.create({ url: chrome.runtime.getURL('onboarding/onboarding.html') });
+  chrome.tabs.create({ url: chrome.runtime.getURL('onboarding/onboarding.html?mode=settings') });
   window.close();
 }
 
