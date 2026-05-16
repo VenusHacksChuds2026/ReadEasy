@@ -146,6 +146,16 @@ body {
   object-fit: contain;
 }
 
+.mode-icon--md {
+  width: 36px;
+  height: 36px;
+}
+
+.mode-icon--lg {
+  width: 42px;
+  height: 42px;
+}
+
 .mode-text {
   display: flex;
   flex-direction: column;
