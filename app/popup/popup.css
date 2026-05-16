@@ -359,9 +359,15 @@ body {
 
 .palette-note {
   font-size: 10.5px;
-  color: #aaa;
+  color: #7ea0b3;
   margin-top: 8px;
   text-align: center;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.palette-note:hover {
+  color: #4a7a93;
 }
 
 .palette-presets {

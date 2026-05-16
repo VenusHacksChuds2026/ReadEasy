@@ -239,6 +239,7 @@ async function applyPaletteState() {
   const effective = computeEffective(activePalette, customEnabled, customColors);
   sendToContent('SET_COLOR_PALETTE', effective);
   updatePaletteUI(activePalette, customEnabled);
+  document.getElementById('palette-note').classList.remove('hidden');
 }
 
 async function loadColorPalette() {
@@ -288,6 +289,11 @@ document.getElementById('custom-toggle-check').addEventListener('change', async 
     await chrome.storage.local.set({ customColors });
     applyPaletteState();
   });
+});
+
+document.getElementById('palette-note').addEventListener('click', async () => {
+  const tab = await getCurrentTab();
+  if (tab?.id) chrome.tabs.reload(tab.id);
 });
 
 // ===== Reading Controls =====
