@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to ReadEasy</title>
+  <link rel="stylesheet" href="onboarding.css">
+  <link rel="stylesheet" href="../content/content.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Step 1: Welcome -->
+    <div class="step active" id="step-1">
+      <img src="../icons/logo.png" alt="ReadEasy" class="onboarding-logo">
+      <h1>Welcome!</h1>
+      <p class="subtitle">Making the web accessible for everyone</p>
+      <p class="description">
+        ReadEasy helps users with visual impairments, dyslexia, ADHD, and other
+        accessibility needs by transforming any website into a more readable experience.
+      </p>
+      <div class="features-grid">
+        <div class="feature-card"><span>📖</span><span>Reading Mode</span></div>
+        <div class="feature-card"><span>🌗</span><span>High Contrast</span></div>
+        <div class="feature-card"><span>📝</span><span>Dyslexia Mode</span></div>
+        <div class="feature-card"><span>🎯</span><span>Focus Mode</span></div>
+        <div class="feature-card"><span>✨</span><span>AI Simplify</span></div>
+        <div class="feature-card"><span>📋</span><span>AI Summary</span></div>
+      </div>
+      <button class="btn-primary" id="btn-start">Get Started →</button>
+    </div>
+
+    <!-- Step 2: Preferences -->
+    <div class="step" id="step-2">
+      <h2>Tell us about your needs</h2>
+      <p class="subtitle">ReadEasy will automatically apply your preferred settings</p>
+      <div class="preferences">
+        <label class="pref-item">
+          <input type="checkbox" name="pref" value="simpleLanguage">
+          <div class="pref-content">
+            <div class="pref-title">I prefer simple language</div>
+            <div class="pref-desc">Auto-enable Reading Mode for cleaner layouts</div>
+          </div>
+        </label>
+        <label class="pref-item">
+          <input type="checkbox" name="pref" value="highContrast">
+          <div class="pref-content">
+            <div class="pref-title">I need high contrast</div>
+            <div class="pref-desc">Auto-enable High Contrast Mode on all pages</div>
+          </div>
+        </label>
+        <label class="pref-item">
+          <input type="checkbox" name="pref" value="noClutter">
+          <div class="pref-content">
+            <div class="pref-title">I get overwhelmed by clutter</div>
+            <div class="pref-desc">Auto-enable Focus Mode to remove distractions</div>
+          </div>
+        </label>
+        <label class="pref-item">
+          <input type="checkbox" name="pref" value="dyslexia">
+          <div class="pref-content">
+            <div class="pref-title">I have dyslexia or reading difficulties</div>
+            <div class="pref-desc">Auto-enable Dyslexia-Friendly fonts and spacing</div>
+          </div>
+        </label>
+        <label class="pref-item">
+          <input type="checkbox" name="pref" value="screenReader">
+          <div class="pref-content">
+            <div class="pref-title">I use a screen reader</div>
+            <div class="pref-desc">Auto-generate missing alt text using AI</div>
+          </div>
+        </label>
+      </div>
+      <div class="step-buttons">
+        <button class="btn-secondary" id="btn-back-2">← Back</button>
+        <button class="btn-primary" id="btn-next-2">Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: API Key -->
+    <div class="step" id="step-3">
+      <h2>Enable AI Features</h2>
+      <p class="subtitle">Optional — adds AI-powered page simplification and image descriptions</p>
+      <div class="info-box">
+        <p>With a free Groq API key, ReadEasy can:</p>
+        <ul>
+          <li>Generate alt text for images missing descriptions</li>
+          <li>Rewrite complex text in simpler language</li>
+          <li>Summarize any page into key bullet points</li>
+        </ul>
+        <div class="security-note">🔒 Your key is stored locally and only sent to Groq's API.</div>
+      </div>
+      <div class="form-group">
+        <label for="api-key-input">Groq API Key</label>
+        <input type="password" id="api-key-input" placeholder="gsk_..." autocomplete="off" spellcheck="false">
+        <a href="https://console.groq.com/keys" target="_blank" rel="noopener" class="api-link">
+          Get a free API key at console.groq.com →
+        </a>
+      </div>
+      <div class="step-buttons">
+        <button class="btn-secondary" id="btn-back-3">← Back</button>
+        <button class="btn-primary" id="btn-next-3">Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Done -->
+    <div class="step" id="step-4">
+      <div class="step-icon success" aria-hidden="true">✓</div>
+      <h2>You're all set!</h2>
+      <p class="subtitle">ReadEasy is ready to use</p>
+      <div class="tips">
+        <div class="tip">
+          <span aria-hidden="true">🖱️</span>
+          <span>Click the extension icon in your browser toolbar to open the panel</span>
+        </div>
+        <div class="tip">
+          <span aria-hidden="true">🔀</span>
+          <span>Toggle any accessibility mode on or off for the current page</span>
+        </div>
+        <div class="tip">
+          <span aria-hidden="true">⚙️</span>
+          <span>Return to this page anytime via the settings button in the panel</span>
+        </div>
+      </div>
+      <button class="btn-primary" id="btn-finish">Start Browsing →</button>
+    </div>
+
+    <!-- Progress dots -->
+    <div class="progress" aria-hidden="true">
+      <div class="dot active" id="dot-1"></div>
+      <div class="dot" id="dot-2"></div>
+      <div class="dot" id="dot-3"></div>
+      <div class="dot" id="dot-4"></div>
+    </div>
+  </div>
+
+  <script src="onboarding.js"></script>
+</body>
+</html>

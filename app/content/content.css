@@ -1,0 +1,167 @@
+/* ===== READING MODE ===== */
+html.readeasy-reading .readeasy-hide-in-reading {
+  display: none !important;
+}
+
+html.readeasy-reading body {
+  background: #f5f3ef !important;
+}
+
+html.readeasy-reading .readeasy-main-content {
+  max-width: 740px !important;
+  margin: 0 auto !important;
+  padding: 40px 32px !important;
+  background: #ffffff !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06) !important;
+  float: none !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+html.readeasy-reading .readeasy-main-content,
+html.readeasy-reading .readeasy-main-content p,
+html.readeasy-reading .readeasy-main-content li,
+html.readeasy-reading .readeasy-main-content td,
+html.readeasy-reading .readeasy-main-content span {
+  font-size: 18px !important;
+  line-height: 1.85 !important;
+  color: #2c2c2c !important;
+  font-family: Georgia, 'Times New Roman', serif !important;
+}
+
+html.readeasy-reading .readeasy-main-content p {
+  margin-bottom: 1.3em !important;
+}
+
+html.readeasy-reading .readeasy-main-content h1,
+html.readeasy-reading .readeasy-main-content h2,
+html.readeasy-reading .readeasy-main-content h3 {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  color: #1a1a1a !important;
+  margin-top: 1.5em !important;
+  margin-bottom: 0.5em !important;
+}
+
+/* ===== HIGH CONTRAST MODE ===== */
+html.readeasy-high-contrast body,
+html.readeasy-high-contrast div,
+html.readeasy-high-contrast section,
+html.readeasy-high-contrast article,
+html.readeasy-high-contrast main,
+html.readeasy-high-contrast aside,
+html.readeasy-high-contrast nav,
+html.readeasy-high-contrast header,
+html.readeasy-high-contrast footer,
+html.readeasy-high-contrast p,
+html.readeasy-high-contrast span,
+html.readeasy-high-contrast li,
+html.readeasy-high-contrast td,
+html.readeasy-high-contrast th,
+html.readeasy-high-contrast h1,
+html.readeasy-high-contrast h2,
+html.readeasy-high-contrast h3,
+html.readeasy-high-contrast h4,
+html.readeasy-high-contrast h5,
+html.readeasy-high-contrast h6,
+html.readeasy-high-contrast label,
+html.readeasy-high-contrast strong,
+html.readeasy-high-contrast em {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+html.readeasy-high-contrast a {
+  color: #ffff00 !important;
+  background-color: #000000 !important;
+}
+
+html.readeasy-high-contrast a:visited {
+  color: #ffaaff !important;
+}
+
+html.readeasy-high-contrast button,
+html.readeasy-high-contrast [role="button"],
+html.readeasy-high-contrast input[type="button"],
+html.readeasy-high-contrast input[type="submit"] {
+  background-color: #222222 !important;
+  border: 2px solid #ffffff !important;
+  color: #ffffff !important;
+}
+
+html.readeasy-high-contrast input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]),
+html.readeasy-high-contrast textarea,
+html.readeasy-high-contrast select {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+  border: 1px solid #aaaaaa !important;
+}
+
+html.readeasy-high-contrast img {
+  filter: contrast(1.2) brightness(0.9) !important;
+}
+
+/* ===== DYSLEXIA-FRIENDLY MODE ===== */
+html.readeasy-dyslexia *:not(code):not(pre):not(.readeasy-no-dyslexia) {
+  font-family: 'Verdana', 'Geneva', 'Trebuchet MS', Arial, sans-serif !important;
+  letter-spacing: 0.1em !important;
+  word-spacing: 0.2em !important;
+  line-height: 1.95 !important;
+  font-style: normal !important;
+}
+
+html.readeasy-dyslexia p,
+html.readeasy-dyslexia li,
+html.readeasy-dyslexia td,
+html.readeasy-dyslexia blockquote {
+  text-align: left !important;
+  max-width: 68ch !important;
+  margin-bottom: 1.4em !important;
+}
+
+html.readeasy-dyslexia h1,
+html.readeasy-dyslexia h2,
+html.readeasy-dyslexia h3,
+html.readeasy-dyslexia h4 {
+  letter-spacing: 0.06em !important;
+  word-spacing: 0.1em !important;
+  font-weight: 700 !important;
+  margin-bottom: 0.6em !important;
+}
+
+/* ===== FOCUS MODE ===== */
+html.readeasy-focus * {
+  animation: none !important;
+  animation-duration: 0s !important;
+  transition-duration: 0s !important;
+}
+
+html.readeasy-focus [class*="cookie"],
+html.readeasy-focus [id*="cookie"],
+html.readeasy-focus [class*="gdpr"],
+html.readeasy-focus [class*="consent"],
+html.readeasy-focus [class*="popup"]:not([role="dialog"]),
+html.readeasy-focus [class*="Popup"]:not([role="dialog"]),
+html.readeasy-focus [class*="modal"]:not([role="dialog"]):not([aria-modal="true"]),
+html.readeasy-focus [class*="Modal"]:not([role="dialog"]),
+html.readeasy-focus [class*="overlay"]:not([role="dialog"]):not([aria-modal="true"]),
+html.readeasy-focus [class*="banner"]:not([role="banner"]),
+html.readeasy-focus [class*="newsletter"],
+html.readeasy-focus [class*="subscribe"],
+html.readeasy-focus [class*="notification"]:not([role="alert"]):not([aria-live]) {
+  display: none !important;
+}
+
+/* ===== SCREEN READER AID ===== */
+img[data-readeasy-alt="true"] {
+  outline: 2px dashed #7ea0b3 !important;
+  outline-offset: 2px !important;
+}
+
+/* ===== SIMPLIFIED TEXT INDICATOR ===== */
+.readeasy-simplified {
+  border-left: 3px solid #7ea0b3 !important;
+  padding-left: 10px !important;
+  margin-left: -13px !important;
+}
