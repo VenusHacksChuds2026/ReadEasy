@@ -67,7 +67,7 @@ body {
 /* ===== SECTIONS ===== */
 .section {
   padding: 11px 16px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #d8d8d8;
 }
 
 .section:last-child {
