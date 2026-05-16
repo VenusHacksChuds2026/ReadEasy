@@ -18,7 +18,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+  padding: 5px 16px;
   background: linear-gradient(135deg, #7ea0b3, #4a7a93);
   color: white;
 }
