@@ -100,6 +100,12 @@ html.readeasy-dyslexia h4 {
   transform: translateY(-50%);
 }
 
+html.readeasy-high-contrast #readeasy-ruler {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-top-color: rgba(255, 255, 255, 0.12) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+}
+
 /* ===== READING CONTROLS ===== */
 html[data-re-prefs] p,
 html[data-re-prefs] li,
