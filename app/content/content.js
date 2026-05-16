@@ -275,8 +275,8 @@ async function init() {
     if (readingPrefs) applyReadingPrefs(readingPrefs);
 
     let colors = null, type = 'none';
-    if (customEnabled && customColors) {
-      colors = customColors;
+    if (customEnabled) {
+      colors = customColors || { bg: '#ffffff', text: '#222222', link: '#222222' };
       type = activePalette !== 'none' ? activePalette : 'custom';
     } else if (activePalette !== 'none') {
       colors = PALETTE_COLORS[activePalette];

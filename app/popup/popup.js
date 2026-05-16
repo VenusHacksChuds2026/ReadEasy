@@ -215,9 +215,10 @@ const PALETTE_PRESETS = {
 };
 
 function computeEffective(activePalette, customEnabled, customColors) {
-  if (customEnabled && customColors) {
+  if (customEnabled) {
+    const colors = customColors || { bg: '#ffffff', text: '#222222', link: '#222222' };
     const type = (activePalette && activePalette !== 'none') ? activePalette : 'custom';
-    return { colors: customColors, type };
+    return { colors, type };
   }
   if (activePalette && activePalette !== 'none') {
     return { colors: PALETTE_PRESETS[activePalette], type: activePalette };
@@ -229,9 +230,7 @@ function updatePaletteUI(activePalette, customEnabled) {
   document.querySelectorAll('.palette-btn[data-palette]').forEach(btn =>
     btn.classList.toggle('active', btn.dataset.palette === activePalette)
   );
-  const customBtn = document.getElementById('btn-custom-toggle');
-  customBtn.textContent = customEnabled ? 'Remove' : 'Apply';
-  customBtn.classList.toggle('active', customEnabled);
+  document.getElementById('custom-toggle-check').checked = customEnabled;
 }
 
 async function applyPaletteState() {
@@ -264,9 +263,18 @@ document.querySelectorAll('.palette-btn[data-palette]').forEach(btn => {
   });
 });
 
-document.getElementById('btn-custom-toggle').addEventListener('click', async () => {
-  const { customEnabled = false } = await chrome.storage.local.get('customEnabled');
-  await chrome.storage.local.set({ customEnabled: !customEnabled });
+document.getElementById('custom-toggle-check').addEventListener('change', async e => {
+  const newEnabled = e.target.checked;
+  if (newEnabled) {
+    const customColors = {
+      bg:   document.getElementById('color-bg').value,
+      text: document.getElementById('color-text').value,
+      link: document.getElementById('color-text').value,
+    };
+    await chrome.storage.local.set({ customEnabled: true, customColors });
+  } else {
+    await chrome.storage.local.set({ customEnabled: false });
+  }
   applyPaletteState();
 });
 
