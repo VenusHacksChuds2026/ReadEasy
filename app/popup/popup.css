@@ -147,6 +147,11 @@ body {
   object-fit: contain;
 }
 
+.mode-icon--lg {
+  width: 32px;
+  height: 32px;
+}
+
 .mode-text {
   display: flex;
   flex-direction: column;
