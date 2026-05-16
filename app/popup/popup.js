@@ -231,7 +231,7 @@ async function applyPalette(name, colors) {
     btn.classList.toggle('active', btn.dataset.palette === name)
   );
   await chrome.storage.local.set({ activePalette: name, colorPalette: colors });
-  sendToContent('SET_COLOR_PALETTE', { colors });
+  sendToContent('SET_COLOR_PALETTE', { colors, type: name });
 }
 
 document.querySelectorAll('.palette-btn').forEach(btn => {

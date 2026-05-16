@@ -178,25 +178,41 @@ async function simplifyPage() {
   return { success: false, error: 'No simplified text returned.' };
 }
 
-function applyColorPalette(colors) {
-  let styleEl = document.getElementById('readeasy-palette');
-  if (!colors) {
-    if (styleEl) styleEl.remove();
-    return;
-  }
-  if (!styleEl) {
-    styleEl = document.createElement('style');
-    styleEl.id = 'readeasy-palette';
-    document.head.appendChild(styleEl);
-  }
+const CB_FILTERS = {
+  deuteranopia: `<feColorMatrix type="matrix" values="0.625 0.375 0 0 0  0.7 0.3 0 0 0  0 0.3 0.7 0 0  0 0 0 1 0"/>`,
+  protanopia:   `<feColorMatrix type="matrix" values="0.567 0.433 0 0 0  0.558 0 0.442 0 0  0 0.242 0.758 0 0  0 0 0 1 0"/>`,
+  tritanopia:   `<feColorMatrix type="matrix" values="0.95 0.05 0 0 0  0 0.433 0.567 0 0  0 0.475 0.525 0 0  0 0 0 1 0"/>`,
+  monochrome:   `<feColorMatrix type="saturate" values="0"/>`,
+};
+
+function applyColorPalette(colors, type) {
+  document.getElementById('readeasy-palette')?.remove();
+  document.getElementById('readeasy-cbf-svg')?.remove();
+
+  if (!colors) return;
+
   const { bg, text, link } = colors;
+  const hasFilter = type && CB_FILTERS[type];
+
+  const styleEl = document.createElement('style');
+  styleEl.id = 'readeasy-palette';
   styleEl.textContent = `
     html, body { background-color: ${bg} !important; }
     body, body p, body li, body td, body th,
     body h1, body h2, body h3, body h4, body h5, body h6,
     body span, body label, body blockquote { color: ${text} !important; }
     body a { color: ${link} !important; }
+    ${hasFilter ? `body img, body canvas, body video, body svg:not(#readeasy-cbf-svg) { filter: url(#readeasy-cbf) !important; }` : ''}
   `;
+  document.head.appendChild(styleEl);
+
+  if (hasFilter) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.id = 'readeasy-cbf-svg';
+    svg.setAttribute('style', 'position:absolute;width:0;height:0;overflow:hidden');
+    svg.innerHTML = `<defs><filter id="readeasy-cbf">${CB_FILTERS[type]}</filter></defs>`;
+    document.body.prepend(svg);
+  }
 }
 
 function applyReadingPrefs({ fontSize = 100, lineHeight = 1.5, letterSpacing = 0, wordSpacing = 0 }) {
@@ -260,12 +276,12 @@ function getPageContent() {
 
 async function init() {
   try {
-    const { activeModes = {}, readingPrefs, colorPalette } = await chrome.storage.local.get(['activeModes', 'readingPrefs', 'colorPalette']);
+    const { activeModes = {}, readingPrefs, colorPalette, activePalette } = await chrome.storage.local.get(['activeModes', 'readingPrefs', 'colorPalette', 'activePalette']);
     for (const [mode, enabled] of Object.entries(activeModes)) {
       if (enabled) setMode(mode, true);
     }
     if (readingPrefs) applyReadingPrefs(readingPrefs);
-    if (colorPalette) applyColorPalette(colorPalette);
+    if (colorPalette) applyColorPalette(colorPalette, activePalette);
   } catch {
     // storage unavailable
   }
@@ -296,7 +312,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       break;
 
     case 'SET_COLOR_PALETTE':
-      applyColorPalette(message.colors);
+      applyColorPalette(message.colors, message.type);
       sendResponse({ success: true });
       break;
 
