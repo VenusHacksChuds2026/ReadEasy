@@ -1,6 +1,6 @@
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const TEXT_MODEL = 'llama-3.3-70b-versatile';
-const VISION_MODEL = 'llama-3.2-11b-vision-preview';
+const VISION_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 
 async function callGroq(apiKey, messages, model = TEXT_MODEL, maxTokens = 2048) {
   const res = await fetch(GROQ_URL, {
@@ -21,27 +21,11 @@ async function callGroq(apiKey, messages, model = TEXT_MODEL, maxTokens = 2048) 
   return data.choices?.[0]?.message?.content ?? null;
 }
 
-async function fetchImageAsBase64(url) {
-  const res = await fetch(url);
-  const buffer = await res.arrayBuffer();
-  const bytes = new Uint8Array(buffer);
-  let binary = '';
-  const chunkSize = 8192;
-  for (let i = 0; i < bytes.length; i += chunkSize) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
-  }
-  return {
-    base64: btoa(binary),
-    mimeType: res.headers.get('content-type')?.split(';')[0] || 'image/jpeg',
-  };
-}
-
 async function generateAltText(apiKey, imageUrl) {
-  const { base64, mimeType } = await fetchImageAsBase64(imageUrl);
   const text = await callGroq(apiKey, [{
     role: 'user',
     content: [
-      { type: 'image_url', image_url: { url: `data:${mimeType};base64,${base64}` } },
+      { type: 'image_url', image_url: { url: imageUrl } },
       { type: 'text', text: 'Generate a concise, descriptive alt text for this image in under 125 characters. Describe what the image shows. Do not start with "image of" or "picture of".' },
     ],
   }], VISION_MODEL);

@@ -178,6 +178,17 @@ body {
   color: #999;
 }
 
+.sr-feedback {
+  font-size: 11px;
+  color: #7ea0b3;
+  padding: 0 0 4px 52px;
+  margin-top: -4px;
+}
+
+.sr-feedback--error {
+  color: #c0392b;
+}
+
 /* ===== TOGGLE SWITCH ===== */
 .toggle {
   position: relative;

@@ -18,9 +18,6 @@ function setMode(mode, enabled) {
     if (enabled) initReadingRuler();
     else cleanupReadingRuler();
   }
-  if (mode === 'screenReader' && enabled) {
-    runScreenReaderAid();
-  }
 }
 
 function findMainContent() {
@@ -173,6 +170,10 @@ async function runScreenReaderAid() {
     .filter(img => img.src && img.src.startsWith('http') && !img.dataset.readeasyAlt)
     .slice(0, 5);
 
+  if (imgs.length === 0) return { count: 0, found: 0 };
+
+  let count = 0;
+  let lastError = null;
   for (const img of imgs) {
     try {
       const response = await chrome.runtime.sendMessage({
@@ -183,11 +184,15 @@ async function runScreenReaderAid() {
         img.alt = response.altText;
         img.title = `AI: ${response.altText}`;
         img.dataset.readeasyAlt = 'true';
+        count++;
+      } else if (response?.error) {
+        lastError = response.error;
       }
-    } catch {
-      // skip image if it fails
+    } catch (e) {
+      lastError = e.message;
     }
   }
+  return { count, found: imgs.length, error: lastError };
 }
 
 async function simplifyPage() {
@@ -317,7 +322,10 @@ async function init() {
     } = await chrome.storage.local.get(['activeModes', 'readingPrefs', 'activePalette', 'customEnabled', 'customColors']);
 
     for (const [mode, enabled] of Object.entries(activeModes)) {
-      if (enabled) setMode(mode, true);
+      if (enabled) {
+        setMode(mode, true);
+        if (mode === 'screenReader') runScreenReaderAid();
+      }
     }
     if (readingPrefs) applyReadingPrefs(readingPrefs);
 
@@ -339,6 +347,10 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   switch (message.type) {
     case 'TOGGLE_MODE':
       setMode(message.mode, message.enabled);
+      if (message.mode === 'screenReader' && message.enabled) {
+        runScreenReaderAid().then(result => sendResponse({ success: true, ...result }));
+        return true;
+      }
       sendResponse({ success: true });
       break;
 

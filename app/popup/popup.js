@@ -72,7 +72,33 @@ async function toggleMode(mode, enabled) {
   const { activeModes = {} } = await chrome.storage.local.get('activeModes');
   activeModes[mode] = enabled;
   await chrome.storage.local.set({ activeModes });
-  await sendToContent('TOGGLE_MODE', { mode, enabled });
+
+  if (mode === 'screenReader') {
+    const el = document.getElementById('sr-feedback');
+    if (enabled) {
+      el.textContent = 'Scanning for images…';
+      el.classList.remove('hidden', 'sr-feedback--error');
+    } else {
+      el.classList.add('hidden');
+    }
+  }
+
+  const res = await sendToContent('TOGGLE_MODE', { mode, enabled });
+
+  if (mode === 'screenReader' && enabled) {
+    const el = document.getElementById('sr-feedback');
+    if (res?.error && res.count === 0) {
+      el.textContent = `⚠ ${res.error}`;
+      el.classList.add('sr-feedback--error');
+    } else if (res?.found === 0) {
+      el.textContent = 'No images missing alt text on this page.';
+    } else if (res?.count > 0) {
+      el.textContent = `✓ Added alt text to ${res.count} image${res.count === 1 ? '' : 's'}`;
+    } else {
+      el.textContent = `Found ${res?.found ?? 0} image(s) but could not process them.`;
+      el.classList.add('sr-feedback--error');
+    }
+  }
 }
 
 function openSettings() {
