@@ -1,6 +1,6 @@
 const isSettingsMode = new URLSearchParams(location.search).get('mode') === 'settings';
 let currentStep = 1;
-const totalSteps = 4;
+const totalSteps = 3;
 
 function showStep(n) {
   document.querySelectorAll('.step').forEach((el, i) => {
@@ -58,8 +58,7 @@ document.getElementById('btn-start').addEventListener('click', nextStep);
 document.getElementById('btn-back-2').addEventListener('click', prevStep);
 document.getElementById('btn-next-2').addEventListener('click', nextStep);
 document.getElementById('btn-back-3').addEventListener('click', prevStep);
-document.getElementById('btn-next-3').addEventListener('click', isSettingsMode ? saveSettings : nextStep);
-document.getElementById('btn-finish').addEventListener('click', finish);
+document.getElementById('btn-next-3').addEventListener('click', isSettingsMode ? saveSettings : finish);
 
 // Live mode preview on the onboarding page itself (first-run only)
 if (!isSettingsMode) {
