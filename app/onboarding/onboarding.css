@@ -114,8 +114,19 @@ h1, h2 {
   color: #1a3340;
 }
 
-.feature-card span:first-child {
+.feature-icon {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.feature-icon-emoji {
   font-size: 22px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ===== PREFERENCES ===== */
