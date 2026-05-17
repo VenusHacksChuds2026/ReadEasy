@@ -22,7 +22,8 @@ function prevStep() {
 
 function buildActiveModes(preferences) {
   return {
-    cleanView:    !!(preferences.simpleLanguage || preferences.noClutter),
+    focus:        !!preferences.simpleLanguage,
+    cleanView:    !!preferences.noClutter,
     highContrast: !!preferences.highContrast,
     dyslexia:     !!preferences.dyslexia,
     screenReader: !!preferences.screenReader,
