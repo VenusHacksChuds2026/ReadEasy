@@ -1,5 +1,6 @@
 const MODES = {
   highContrast: 'readeasy-high-contrast',
+  cleanView: 'readeasy-clean-view',
   dyslexia: 'readeasy-dyslexia',
   focus: 'readeasy-focus',
   screenReader: 'readeasy-screen-reader',
@@ -9,6 +10,10 @@ function setMode(mode, enabled) {
   const cls = MODES[mode];
   if (!cls) return;
   document.documentElement.classList.toggle(cls, enabled);
+  if (mode === 'cleanView') {
+    if (enabled) initCleanView();
+    else cleanupCleanView();
+  }
   if (mode === 'focus') {
     if (enabled) initReadingRuler();
     else cleanupReadingRuler();
@@ -64,6 +69,48 @@ function cleanupReadingRuler() {
   document.removeEventListener('mousemove', onRulerMouseMove);
   const ruler = document.getElementById('readeasy-ruler');
   if (ruler) ruler.remove();
+}
+
+let cvObserver = null;
+
+function hideDistractions() {
+  document.querySelectorAll('body *').forEach(el => {
+    if (el.dataset.readeasyCV !== undefined) return;
+    const tag = el.tagName.toLowerCase();
+    if (['script', 'style', 'link', 'meta', 'noscript'].includes(tag)) return;
+
+    const style = window.getComputedStyle(el);
+    const isFixed = style.position === 'fixed';
+    const zIndex = parseInt(style.zIndex) || 0;
+
+    // Hide high-z-index fixed overlays (popups, banners, cookie notices)
+    if (isFixed && zIndex > 99 && !el.closest('header, nav, [role="navigation"], [role="banner"]')) {
+      el.dataset.readeasyCV = 'true';
+      return;
+    }
+
+    // Hide elements with common distraction class/id patterns
+    const identifier = (el.getAttribute('class') || '') + ' ' + (el.getAttribute('id') || '');
+    if (/popup|modal|overlay|cookie|consent|gdpr|newsletter|subscribe|lightbox|interstitial|chat-widget|chat-bubble|chat-button|floating-btn|sticky-ad|promo-bar/i.test(identifier)) {
+      if (!el.closest('main, article, [role="main"]')) {
+        el.dataset.readeasyCV = 'true';
+      }
+    }
+  });
+}
+
+function initCleanView() {
+  hideDistractions();
+  // Watch for dynamically injected popups
+  cvObserver = new MutationObserver(hideDistractions);
+  cvObserver.observe(document.body, { childList: true, subtree: false });
+}
+
+function cleanupCleanView() {
+  if (cvObserver) { cvObserver.disconnect(); cvObserver = null; }
+  document.querySelectorAll('[data-readeasy-cv]').forEach(el => {
+    delete el.dataset.readeasyCV;
+  });
 }
 
 function detectIssues() {

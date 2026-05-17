@@ -58,6 +58,33 @@ html.readeasy-high-contrast img {
   filter: contrast(1.2) brightness(0.9) !important;
 }
 
+/* ===== CLEAN VIEW MODE ===== */
+
+/* Pause all CSS animations and GIF-like flickers */
+html.readeasy-clean-view *,
+html.readeasy-clean-view *::before,
+html.readeasy-clean-view *::after {
+  animation-play-state: paused !important;
+}
+
+/* Hide media and embeds */
+html.readeasy-clean-view video,
+html.readeasy-clean-view audio,
+html.readeasy-clean-view iframe,
+html.readeasy-clean-view [data-readeasy-cv] {
+  display: none !important;
+}
+
+/* Hide images outside navigation/branding areas */
+html.readeasy-clean-view img:not(header img):not(nav img):not([role="navigation"] img):not([role="banner"] img) {
+  visibility: hidden !important;
+}
+
+/* Remove decorative background images outside navigation */
+html.readeasy-clean-view *:not(header):not(header *):not(nav):not(nav *):not([role="navigation"]):not([role="navigation"] *) {
+  background-image: none !important;
+}
+
 /* ===== DYSLEXIA-FRIENDLY MODE ===== */
 html.readeasy-dyslexia *:not(code):not(pre):not(.readeasy-no-dyslexia) {
   font-family: 'Verdana', 'Geneva', 'Trebuchet MS', Arial, sans-serif !important;
