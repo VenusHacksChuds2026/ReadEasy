@@ -33,5 +33,5 @@ Click the ReadEasy icon in the Chrome toolbar to open the panel. Toggle any mode
 
 - Chrome Extension Manifest V3
 - Vanilla JavaScript, HTML, CSS (no build step)
-- Groq API (Llama 3.3 for text, Llama 3.2 Vision for images)
+- Groq API (Llama 3.3 for text, Llama 4 Scout for images)
 - `chrome.storage.local` for persisting preferences
